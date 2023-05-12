@@ -1,0 +1,23 @@
+#pragma kernel FillDisplacementAndDerivatives
+
+RWTexture2D<float3> Displacement;
+RWTexture2D<float3> Derivatives;
+
+Texture2D<float2> DxDz;
+Texture2D<float2> DyDxz;
+Texture2D<float2> DyxDyz;
+Texture2D<float2> DxxDzz;
+
+float Lambda;
+
+[numthreads(8,8,1)]
+void FillDisplacementAndDerivatives(uint3 id : SV_DispatchThreadID)
+{
+    float2 Dx_Dz = DxDz[id.xy];
+    float2 Dy_Dxz = DyDxz[id.xy];
+    float2 Dyx_Dyz = DyxDyz[id.xy];
+    float2 Dxx_Dzz = DxxDzz[id.xy];
+
+    Displacement[id.xy] = float3(Lambda * Dx_Dz.x, Dy_Dxz.x, Lambda * Dx_Dz.y);
+    Derivatives[id.xy] = float4(Dyx_Dyz, Dxx_Dzz * Lambda);
+}

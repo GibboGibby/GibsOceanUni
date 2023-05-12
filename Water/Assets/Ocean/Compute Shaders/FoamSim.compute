@@ -1,0 +1,42 @@
+#pragma kernel FoamSim
+#pragma kernel Init
+
+RWTexture2D<float4> Turbulence;
+Texture2D<float2> DyDxz;
+Texture2D<float2> DxxDzz;
+
+float DeltaTime;
+float FoamDecayRate;
+float Lambda;
+
+[numthreads(8,8,1)]
+void Init(uint3 id : SV_DispatchThreadID)
+{
+    Turbulence[id.xy] = -5;
+}
+
+[numthreads(8,8,1)]
+void FoamSim(uint3 id : SV_DispatchThreadID)
+{
+    float Dxz = DyDxz[id.xy].y;
+    float2 dxxdzz = DxxDzz[id.xy];
+
+    float jxx = 1 + dxxdzz.x;
+    float jzz = 1 + dxxdzz.y;
+    float jxz = Dxz;
+
+    float jacobian = jxx * jzz - jxz * jxz;
+    float jminus = 0.5 * (jxx * jzz) - 0.5 * sqrt((jxx - jzz) * (jxx - jzz) + 4 * jxz * jxz);
+
+    float bias = 1;
+    float2 current = float2(-jminus, -jacobian) + bias;
+    float2 persistent = Turbulence[id.xy].zw;
+    persistent -= 0.02f * DeltaTime;
+    persistent = max(current, persistent);
+
+    jacobian = (1 + Lambda * dxxdzz.x) * (1 + Lambda * dxxdzz.y) - Lambda * Lambda * Dxz * Dxz;
+    Turbulence[id.xy] = Turbulence[id.xy].r + DeltaTime * 0.5 / max(jacobian, 0.5);
+    Turbulence[id.xy] = min(jacobian, Turbulence[id.xy].r);
+
+    //Turbulence[id.xy] = float4(current, persistent);
+}
