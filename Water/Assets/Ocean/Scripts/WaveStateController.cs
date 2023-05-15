@@ -6,23 +6,37 @@ using UnityEngine;
 
 namespace GibsOcean
 {
+    [System.Serializable]
+    public struct WaveState
+    {
+        public string Name;
+        public WaveSettings wsEnd;
+        public Material matEnd;
+    }
+    
     public class WaveStateController : MonoBehaviour
     {
         [SerializeField] WaveGen waveGen;
         [SerializeField] private OceanRenderer oceanRenderer;
         
         [SerializeField] private static Material oceanMaterial;
+
+        [SerializeField] private Tuple<WaveSettings, Material> calmState;
+        
         
         
         //[SerializeField] private WaveSettings notCalm;
 
-        public WaveSettings wsStart;
-        public WaveSettings wsEnd;
+        //public WaveSettings wsStart;
+        //public WaveSettings wsEnd;
 
-        [SerializeField] public Material mStart;
-        [SerializeField] public Material mEnd;
+        //[SerializeField] public Material mStart;
+        //[SerializeField] public Material mEnd;
 
         [SerializeField] private Material bloodOcean;
+
+        [SerializeField]public List<WaveState> WaveStates;
+        private int waveStateIndex = 0;
         
 
         [SerializeField] private float totalTime;
@@ -30,57 +44,52 @@ namespace GibsOcean
         private void Awake()
         {
             //waveGen.UpdateWaveSettings(wsStart);
-            
+            WaveStates state = WaveStates[waveStateIndex];
+			StartCoroutine(WaveLerp(state.matEnd, state.wsEnd), -1, 0);
+			waveStateIndex++;
+			if (waveStateIndex == WaveStates.Count) waveStateIndex = 0;
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.O))
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                wsStart = waveGen.GetWaveSettings();
-                StartCoroutine(WaveLerp(null, wsEnd));
+                
+                Debug.Log(state.Name);
+                waveStateIndex++;
+                if (waveStateIndex >= WaveStates.Count) waveStateIndex = WaveStates.Count - 1;
+				WaveState state = WaveStates[waveStateIndex];
+                StartCoroutine(WaveLerp(state.matEnd, state.wsEnd));
             }
-            
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                wsStart = waveGen.GetWaveSettings();
-                mStart = new Material(oceanRenderer.GetMaterial());
-                StartCoroutine(WaveLerp(mEnd, wsEnd));
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                mStart = new Material(oceanRenderer.GetMaterial());
-                StartCoroutine(WaveLerp(mEnd));
-            }
-
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                mStart = new Material(oceanRenderer.GetMaterial());
-                StartCoroutine(WaveLerp(mEnd, null, 0));
-                StartCoroutine(WaveLerp(mEnd, null, 1));
-                StartCoroutine(WaveLerp(bloodOcean, null, 2));
-            }
+			if (Input.GetKeyDown(KeyCode.T))
+			{
+				waveStateIndex--;
+				if (waveStateIndex < 0) waveStateIndex = 0;
+				WaveState state = WaveStates[waveStateIndex];
+				StartCoroutine(WaveLerp(state.matEnd, state.wsEnd));
+			}
         }
 
-        public IEnumerator WaveLerp(Material material = null, WaveSettings waveSettings = null, int matNumber = -1)
+        public IEnumerator WaveLerp(Material material = null, WaveSettings waveSettings = null, int matNumber = -1, float _totalTime = totalTime)
         {
             float timeElapsed = 0;
             bool waveSettingsPresent = (waveSettings != null);
             bool materialPresent = (material != null);
-            while (timeElapsed < totalTime)
+            Material matStart = new Material(oceanRenderer.GetMaterial());
+            WaveSettings wsStart = waveGen.GetWaveSettings();
+            while (timeElapsed < _totalTime)
             {
                 if (waveSettingsPresent)
                 {
-                    WaveSettings newWave = WaveSettingsLerp(wsStart, waveSettings, timeElapsed / totalTime);
+                    WaveSettings newWave = WaveSettingsLerp(wsStart, waveSettings, timeElapsed / _totalTime);
                     waveGen.UpdateWaveSettings(newWave);
                 }
 
                 if (materialPresent)
                 {
-                    Material mat = new Material( WaveMaterialLerp(mStart, new Material(material), timeElapsed / totalTime));
+                    Material mat = new Material( WaveMaterialLerp(matStart, new Material(material), timeElapsed / _totalTime));
                     if (matNumber == -1)
                         oceanRenderer.SetMaterials(mat);
                     else
@@ -94,13 +103,13 @@ namespace GibsOcean
             if (materialPresent)
             {
                 if (matNumber == -1)
-                    oceanRenderer.SetMaterials(new Material(WaveMaterialLerp(mStart, mEnd, 1f)));
+                    oceanRenderer.SetMaterials(new Material(WaveMaterialLerp(matStart, new Material(material), 1f)));
                 else
-                    oceanRenderer.SetMaterial(new Material(WaveMaterialLerp(mStart, mEnd, 1f)), matNumber);
+                    oceanRenderer.SetMaterial(new Material(WaveMaterialLerp(matStart, new Material(material), 1f)), matNumber);
             }
-
+aaaaa
             if (waveSettingsPresent)
-                waveGen.UpdateWaveSettings(wsEnd);
+                waveGen.UpdateWaveSettings(waveSettings);
         }
 
         public static WaveSettings WaveSettingsLerp(WaveSettings input, WaveSettings target, float interpVal)
@@ -123,10 +132,10 @@ namespace GibsOcean
         public static Material WaveMaterialLerp(Material input, Material target, float interpVal)
         {
             Material temp = new Material(input);
-            temp.SetColor("_Color", Color.Lerp(input.GetColor("_Color"), target.GetColor("_Color"), interpVal));
-            temp.SetColor("_SSSColor", Color.Lerp(input.GetColor("_SSSColor"), target.GetColor("_SSSColor"), interpVal));
+            temp.SetColor("_Color", Color.Lerp(temp.GetColor("_Color"), target.GetColor("_Color"), interpVal));
+            temp.SetColor("_SSSColor", Color.Lerp(temp.GetColor("_SSSColor"), target.GetColor("_SSSColor"), interpVal));
             
-            temp.SetColor("_FoamColor", Color.Lerp(input.GetColor("_FoamColor"), target.GetColor("_FoamColor"), interpVal));
+            temp.SetColor("_FoamColor", Color.Lerp(temp.GetColor("_FoamColor"), target.GetColor("_FoamColor"), interpVal));
             temp = ShaderFloatLerp(temp, input, target, "_SSSStrength", interpVal);
             temp = ShaderFloatLerp(temp, input, target, "_SSSScale", interpVal);
             

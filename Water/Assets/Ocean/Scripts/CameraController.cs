@@ -49,6 +49,12 @@ public class CameraController : MonoBehaviour
                 t.position = new Vector3(x, y, z);
             }
         }
+
+        
+
+        
+
+        
         
         CameraState m_TargetCameraState = new CameraState();
         CameraState m_InterpolatingCameraState = new CameraState();
@@ -107,6 +113,11 @@ public class CameraController : MonoBehaviour
             return direction;
         }
         
+        [SerializeField] private bool onBoat;
+        [SerializeField] private Transform boatCameraPos;
+        [SerializeField] private Transform cameraTransform;
+        
+        
         void Update()
         {
             Vector3 translation = Vector3.zero;
@@ -154,6 +165,16 @@ public class CameraController : MonoBehaviour
                 translation *= 10.0f;
             }
 
+            if (onBoat)
+            {
+                translation *= 0.0f;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                onBoat = !onBoat;
+            }
+
             // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
             boost += Input.mouseScrollDelta.y * 0.2f;
             translation *= Mathf.Pow(2.0f, boost);
@@ -171,5 +192,8 @@ public class CameraController : MonoBehaviour
             m_InterpolatingCameraState.LerpTowards(m_TargetCameraState, positionLerpPct, rotationLerpPct);
 
             m_InterpolatingCameraState.UpdateTransform(transform);
+
+            if (onBoat)
+                transform.position = boatCameraPos.position;
         }
     }

@@ -193,7 +193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 70678575}
   depthBeforeSubmerged: 2
   displacementAmount: 2
@@ -244,7 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 70678575}
   depthBeforeSubmerged: 2
   displacementAmount: 2
@@ -295,7 +293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 2055649123}
   depthBeforeSubmerged: 1.75
   displacementAmount: 1
@@ -453,15 +450,15 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -480,7 +477,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 848435518}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -528,6 +525,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   rotationLerpTime: 0.01
   invertY: 0
+  onBoat: 0
+  boatCameraPos: {fileID: 1868643954}
+  cameraTransform: {fileID: 848435521}
 --- !u!1001 &1057660724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -747,7 +747,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 2055649123}
   depthBeforeSubmerged: 1.75
   displacementAmount: 1
@@ -798,7 +797,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 1060357121}
   depthBeforeSubmerged: 1
   displacementAmount: 3
@@ -918,7 +916,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 1060357121}
   depthBeforeSubmerged: 1
   displacementAmount: 3
@@ -1004,7 +1001,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 1060357121}
   depthBeforeSubmerged: 1
   displacementAmount: 3
@@ -1055,7 +1051,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 2055649123}
   depthBeforeSubmerged: 1.75
   displacementAmount: 1
@@ -1200,7 +1195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 70678575}
   depthBeforeSubmerged: 2
   displacementAmount: 2
@@ -1251,7 +1245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 2055649123}
   depthBeforeSubmerged: 1.75
   displacementAmount: 1
@@ -1302,7 +1295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 70678575}
   depthBeforeSubmerged: 2
   displacementAmount: 2
@@ -1360,6 +1352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74d43ef6ab6e4d449f889b25a58dae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showFPS: 1
 --- !u!114 &1801905209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1497,12 +1490,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveGen: {fileID: 1862722161}
   oceanRenderer: {fileID: 1862722163}
-  wsStart: {fileID: 11400000, guid: 7917fa352ae5d214a9207137f2caba34, type: 2}
-  wsEnd: {fileID: 11400000, guid: 891441e2ebe0ca645bb1dec1ffeab815, type: 2}
-  mStart: {fileID: 2100000, guid: 22801c3aabc55a746afe24ec762c8380, type: 2}
-  mEnd: {fileID: 2100000, guid: 2fe4d99651ece9540afae18f4e72f71b, type: 2}
   bloodOcean: {fileID: 2100000, guid: cdb31693898a95545b7afff2cce090b2, type: 2}
+  WaveStates:
+  - Name: Calm
+    wsEnd: {fileID: 11400000, guid: bc4d291c0513fc24d9628f8914ae1797, type: 2}
+    matEnd: {fileID: 2100000, guid: f118eaf6120525d45973ca0b4ffc2a28, type: 2}
+  - Name: Calm But Large
+    wsEnd: {fileID: 11400000, guid: 6622a85103e2cdb49bd4b911bde7c6ae, type: 2}
+    matEnd: {fileID: 2100000, guid: f118eaf6120525d45973ca0b4ffc2a28, type: 2}
+  - Name: Calm Very Large
+    wsEnd: {fileID: 11400000, guid: e4028333be01c8c4cb3ead2420539fae, type: 2}
+    matEnd: {fileID: 2100000, guid: f118eaf6120525d45973ca0b4ffc2a28, type: 2}
+  - Name: Calm But Large
+    wsEnd: {fileID: 11400000, guid: 6622a85103e2cdb49bd4b911bde7c6ae, type: 2}
+    matEnd: {fileID: 2100000, guid: f118eaf6120525d45973ca0b4ffc2a28, type: 2}
+  - Name: Calm Large -180
+    wsEnd: {fileID: 11400000, guid: d72922c520e0dae4688af4466805995b, type: 2}
+    matEnd: {fileID: 2100000, guid: f118eaf6120525d45973ca0b4ffc2a28, type: 2}
+  - Name: Lots of Wind
+    wsEnd: {fileID: 11400000, guid: 891441e2ebe0ca645bb1dec1ffeab815, type: 2}
+    matEnd: {fileID: 2100000, guid: 22801c3aabc55a746afe24ec762c8380, type: 2}
   totalTime: 5
+--- !u!1 &1868643953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1868643954}
+  m_Layer: 0
+  m_Name: CameraPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1868643954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868643953}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.115, y: 3.887, z: -9.141}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 70678576}
+  m_RootOrder: 44
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1870070680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,7 +1586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 1060357121}
   depthBeforeSubmerged: 1
   displacementAmount: 3
@@ -1666,7 +1704,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2754655e15f29942a1424f43e8427e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveGen: {fileID: 1862722161}
   rb: {fileID: 2055649123}
   depthBeforeSubmerged: 1.75
   displacementAmount: 1
