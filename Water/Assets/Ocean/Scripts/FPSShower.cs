@@ -6,29 +6,56 @@ using UnityEngine.UI;
 public class FPSShower : MonoBehaviour
 {
 
-    private Text text;
+    private Text fpsText;
+    [SerializeField] private Text wsText;
 	[SerializeField] private bool showFPS;
+	[SerializeField] private bool showWaveStateName;
 
     private float fps;
+
+    private static string wsName;
+
+    public static void SetWaveStateString(string name)
+    {
+	    wsName = name;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        text = GetComponent<Text>();
+	    fpsText = GetComponent<Text>();
+	    
+	    
     }
 
     // Update is called once per frame
     void Update()
     {
-		if (showFPS)
+	    if (Input.GetKeyDown(KeyCode.O))
+		    showFPS = !showFPS;
+	    if (Input.GetKeyDown(KeyCode.P))
+		    showWaveStateName = !showWaveStateName;
+
+	    if (showFPS)
 		{
 			fps = Time.frameCount / Time.time;
-			text.text = fps.ToString();
+			fpsText.text = fps.ToString();
+		}
+		else
+	    {
+		    fpsText.text = "";
+	    }
+
+		if (showWaveStateName)
+		{
+			wsText.text = wsName;
 		}
 		else
 		{
-			text.text = "";
-		}			
+			wsText.text = "";
+		}
+		
+		
 
-        
+
     }
 }

@@ -39,15 +39,16 @@ namespace GibsOcean
         private int waveStateIndex = 0;
         
 
-        [SerializeField] private float totalTime;
+        [SerializeField] private float _totalTime;
 
         private void Awake()
         {
             //waveGen.UpdateWaveSettings(wsStart);
-            WaveStates state = WaveStates[waveStateIndex];
-			StartCoroutine(WaveLerp(state.matEnd, state.wsEnd), -1, 0);
+            WaveState state = WaveStates[waveStateIndex];
+			StartCoroutine(WaveLerp(state.matEnd, state.wsEnd, -1));
 			waveStateIndex++;
 			if (waveStateIndex == WaveStates.Count) waveStateIndex = 0;
+            FPSShower.SetWaveStateString(state.Name);
         }
 
 
@@ -56,40 +57,43 @@ namespace GibsOcean
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                
-                Debug.Log(state.Name);
+                StopAllCoroutines();
                 waveStateIndex++;
                 if (waveStateIndex >= WaveStates.Count) waveStateIndex = WaveStates.Count - 1;
 				WaveState state = WaveStates[waveStateIndex];
+                FPSShower.SetWaveStateString(state.Name);
                 StartCoroutine(WaveLerp(state.matEnd, state.wsEnd));
             }
 			if (Input.GetKeyDown(KeyCode.T))
 			{
+                StopAllCoroutines();
 				waveStateIndex--;
 				if (waveStateIndex < 0) waveStateIndex = 0;
 				WaveState state = WaveStates[waveStateIndex];
+                FPSShower.SetWaveStateString(state.Name);
 				StartCoroutine(WaveLerp(state.matEnd, state.wsEnd));
 			}
         }
 
-        public IEnumerator WaveLerp(Material material = null, WaveSettings waveSettings = null, int matNumber = -1, float _totalTime = totalTime)
+        public IEnumerator WaveLerp(Material material = null, WaveSettings waveSettings = null, int matNumber = -1, float totalTime = 0)
         {
+            if (totalTime == 0) totalTime = _totalTime;
             float timeElapsed = 0;
             bool waveSettingsPresent = (waveSettings != null);
             bool materialPresent = (material != null);
             Material matStart = new Material(oceanRenderer.GetMaterial());
             WaveSettings wsStart = waveGen.GetWaveSettings();
-            while (timeElapsed < _totalTime)
+            while (timeElapsed < totalTime)
             {
                 if (waveSettingsPresent)
                 {
-                    WaveSettings newWave = WaveSettingsLerp(wsStart, waveSettings, timeElapsed / _totalTime);
+                    WaveSettings newWave = WaveSettingsLerp(wsStart, waveSettings, timeElapsed / totalTime);
                     waveGen.UpdateWaveSettings(newWave);
                 }
 
                 if (materialPresent)
                 {
-                    Material mat = new Material( WaveMaterialLerp(matStart, new Material(material), timeElapsed / _totalTime));
+                    Material mat = new Material( WaveMaterialLerp(matStart, new Material(material), timeElapsed / totalTime));
                     if (matNumber == -1)
                         oceanRenderer.SetMaterials(mat);
                     else
@@ -106,8 +110,7 @@ namespace GibsOcean
                     oceanRenderer.SetMaterials(new Material(WaveMaterialLerp(matStart, new Material(material), 1f)));
                 else
                     oceanRenderer.SetMaterial(new Material(WaveMaterialLerp(matStart, new Material(material), 1f)), matNumber);
-            }
-aaaaa
+            }   
             if (waveSettingsPresent)
                 waveGen.UpdateWaveSettings(waveSettings);
         }

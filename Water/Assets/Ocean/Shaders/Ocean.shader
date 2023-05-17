@@ -1,4 +1,4 @@
-Shader "Ocean/OceanMineFinal"
+Shader "GibsOcean/Ocean"
 {
     Properties
     {
@@ -220,7 +220,7 @@ Shader "Ocean/OceanMineFinal"
 
         void AddMaterialProperties(inout SurfaceOutputStandard o, Input IN, float jacobian)
         {
-            o.Albedo = lerp(0, _FoamColor, jacobian);
+            o.Albedo = lerp(_Color / 2.5f, _FoamColor, jacobian);
             float distanceGloss = lerp(1 - _Roughness, _MaxGloss, 1 / (1 + length(IN.viewVector) * _RoughnessScale));
             o.Smoothness = lerp(distanceGloss, 0, jacobian);
             o.Metallic = 0;
