@@ -38,7 +38,7 @@ namespace GibsOcean
             //initSpectrum.SetTexture(Utils.Kernels.InitSpectrum, Utils.ShaderProperties.Noise, gaussianNoise);
             initSpectrum.Dispatch(Utils.Kernels.InitSpectrum, size / LOCAL_WORK_GROUPS_X, size / LOCAL_WORK_GROUPS_Y, 1);
             
-            initSpectrum.SetTexture(Utils.Kernels.ConjugateSpectrum, Utils.ShaderProperties.H0, initSpectrum);
+            //initSpectrum.SetTexture(Utils.Kernels.ConjugateSpectrum, Utils.ShaderProperties.H0, initSpectrum);
             //initSpectrum.SetTexture(Utils.Kernels.ConjugateSpectrum, Utils.ShaderProperties.H0K, buffer);
             initSpectrum.Dispatch(Utils.Kernels.ConjugateSpectrum, size / LOCAL_WORK_GROUPS_X, size / LOCAL_WORK_GROUPS_Y, 1);
         }
