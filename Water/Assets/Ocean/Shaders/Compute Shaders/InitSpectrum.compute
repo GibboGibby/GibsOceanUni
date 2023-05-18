@@ -40,7 +40,7 @@ float FrequencyDerivative(float k, float g, float depth)
 {
 	float th = tanh(min(k * depth, 10));
 	float ch = cosh(k * depth);
-	return g * (depth * k / ch / ch + th) / Frequency(k, g, depth) / 2;
+	return g * (depth * k / ch / ch + th) / Frequency(k, g, depth) * 0.5;
 }
 
 float NormalisationFactor(float s)
@@ -76,7 +76,7 @@ float Cosine2s(float theta, float s)
 	return NormalisationFactor(s) * pow(abs(cos(0.5 * theta)), 2 * s);
 }
 
-float SpreadPower(float omega, float peakOmega)
+float SpreadPowerHasselman(float omega, float peakOmega)
 {
 	if (omega > peakOmega)
 	{
@@ -90,7 +90,7 @@ float SpreadPower(float omega, float peakOmega)
 
 float DirectionSpectrum(float theta, float omega, SpectrumParameters pars)
 {
-	float s = SpreadPower(omega, pars.peakOmega)
+	float s = SpreadPowerHasselman(omega, pars.peakOmega)
 		+ 16 * tanh(min(omega / pars.peakOmega, 20)) * pars.swell * pars.swell;
 	return lerp(2 / 3.1415 * cos(theta) * cos(theta), Cosine2s(theta - pars.angle, s), pars.spreadBlend);
 }
