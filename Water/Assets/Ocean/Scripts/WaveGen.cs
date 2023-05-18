@@ -57,9 +57,9 @@ namespace GibsOcean
         {
             float boundary1 = 2 * Mathf.PI / lengthScale1 * 6f;
             float boundary2 = 2 * Mathf.PI / lengthScale2 * 6f;
-            cascade0.CalculateInitialSpectrum(waveSettings, lengthScale0, 0.0001f, boundary1);
-            cascade1.CalculateInitialSpectrum(waveSettings, lengthScale1, boundary1, boundary2);
-            cascade2.CalculateInitialSpectrum(waveSettings, lengthScale2, boundary2, 9999);
+            cascade0.InitialSpectrumCalculation(waveSettings, lengthScale0, 0.0001f, boundary1);
+            cascade1.InitialSpectrumCalculation(waveSettings, lengthScale1, boundary1, boundary2);
+            cascade2.InitialSpectrumCalculation(waveSettings, lengthScale2, boundary2, 9999);
 
             Shader.SetGlobalFloat("LengthScale0", lengthScale0);
             Shader.SetGlobalFloat("LengthScale1", lengthScale1);

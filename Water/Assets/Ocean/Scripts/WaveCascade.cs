@@ -79,7 +79,7 @@ namespace GibsOcean
             //foamSimCompute.Dispatch(Utils.Kernels.FoamSimInit, size / LOCAL_WORK_GROUPS_X, size / LOCAL_WORK_GROUPS_Y, 1);
         }
 
-        public void CalculateInitialSpectrum(WaveSettings waveSettings, float lengthScale, float cutoffLow,
+        public void InitialSpectrumCalculation(WaveSettings waveSettings, float lengthScale, float cutoffLow,
             float cutoffHigh)
         {
             lambda = waveSettings.lambda;
